@@ -1,0 +1,581 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6052A2B42964E7370078E798 /* BridgeDeveloperToolkitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6052A2B32964E7370078E798 /* BridgeDeveloperToolkitApp.swift */; };
+		6052A2B62964E7370078E798 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6052A2B52964E7370078E798 /* ContentView.swift */; };
+		6052A2B82964E7390078E798 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6052A2B72964E7390078E798 /* Assets.xcassets */; };
+		6052A2BB2964E7390078E798 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6052A2BA2964E7390078E798 /* Preview Assets.xcassets */; };
+		6052A2C62964E7390078E798 /* BridgeDeveloperToolkitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6052A2C52964E7390078E798 /* BridgeDeveloperToolkitTests.swift */; };
+		6052A2D02964E73A0078E798 /* BridgeDeveloperToolkitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6052A2CF2964E73A0078E798 /* BridgeDeveloperToolkitUITests.swift */; };
+		6052A2D22964E73A0078E798 /* BridgeDeveloperToolkitUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6052A2D12964E73A0078E798 /* BridgeDeveloperToolkitUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6052A2C22964E7390078E798 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6052A2A82964E7370078E798 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6052A2AF2964E7370078E798;
+			remoteInfo = BridgeDeveloperToolkit;
+		};
+		6052A2CC2964E73A0078E798 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6052A2A82964E7370078E798 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6052A2AF2964E7370078E798;
+			remoteInfo = BridgeDeveloperToolkit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		6052A2B02964E7370078E798 /* BridgeDeveloperToolkit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BridgeDeveloperToolkit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6052A2B32964E7370078E798 /* BridgeDeveloperToolkitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDeveloperToolkitApp.swift; sourceTree = "<group>"; };
+		6052A2B52964E7370078E798 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		6052A2B72964E7390078E798 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6052A2BA2964E7390078E798 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		6052A2BC2964E7390078E798 /* BridgeDeveloperToolkit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BridgeDeveloperToolkit.entitlements; sourceTree = "<group>"; };
+		6052A2C12964E7390078E798 /* BridgeDeveloperToolkitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BridgeDeveloperToolkitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6052A2C52964E7390078E798 /* BridgeDeveloperToolkitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDeveloperToolkitTests.swift; sourceTree = "<group>"; };
+		6052A2CB2964E73A0078E798 /* BridgeDeveloperToolkitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BridgeDeveloperToolkitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6052A2CF2964E73A0078E798 /* BridgeDeveloperToolkitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDeveloperToolkitUITests.swift; sourceTree = "<group>"; };
+		6052A2D12964E73A0078E798 /* BridgeDeveloperToolkitUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDeveloperToolkitUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6052A2AD2964E7370078E798 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6052A2BE2964E7390078E798 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6052A2C82964E73A0078E798 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6052A2A72964E7370078E798 = {
+			isa = PBXGroup;
+			children = (
+				6052A2B22964E7370078E798 /* BridgeDeveloperToolkit */,
+				6052A2C42964E7390078E798 /* BridgeDeveloperToolkitTests */,
+				6052A2CE2964E73A0078E798 /* BridgeDeveloperToolkitUITests */,
+				6052A2B12964E7370078E798 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6052A2B12964E7370078E798 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6052A2B02964E7370078E798 /* BridgeDeveloperToolkit.app */,
+				6052A2C12964E7390078E798 /* BridgeDeveloperToolkitTests.xctest */,
+				6052A2CB2964E73A0078E798 /* BridgeDeveloperToolkitUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6052A2B22964E7370078E798 /* BridgeDeveloperToolkit */ = {
+			isa = PBXGroup;
+			children = (
+				6052A2B32964E7370078E798 /* BridgeDeveloperToolkitApp.swift */,
+				6052A2B52964E7370078E798 /* ContentView.swift */,
+				6052A2B72964E7390078E798 /* Assets.xcassets */,
+				6052A2BC2964E7390078E798 /* BridgeDeveloperToolkit.entitlements */,
+				6052A2B92964E7390078E798 /* Preview Content */,
+			);
+			path = BridgeDeveloperToolkit;
+			sourceTree = "<group>";
+		};
+		6052A2B92964E7390078E798 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				6052A2BA2964E7390078E798 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		6052A2C42964E7390078E798 /* BridgeDeveloperToolkitTests */ = {
+			isa = PBXGroup;
+			children = (
+				6052A2C52964E7390078E798 /* BridgeDeveloperToolkitTests.swift */,
+			);
+			path = BridgeDeveloperToolkitTests;
+			sourceTree = "<group>";
+		};
+		6052A2CE2964E73A0078E798 /* BridgeDeveloperToolkitUITests */ = {
+			isa = PBXGroup;
+			children = (
+				6052A2CF2964E73A0078E798 /* BridgeDeveloperToolkitUITests.swift */,
+				6052A2D12964E73A0078E798 /* BridgeDeveloperToolkitUITestsLaunchTests.swift */,
+			);
+			path = BridgeDeveloperToolkitUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6052A2AF2964E7370078E798 /* BridgeDeveloperToolkit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6052A2D52964E73A0078E798 /* Build configuration list for PBXNativeTarget "BridgeDeveloperToolkit" */;
+			buildPhases = (
+				6052A2AC2964E7370078E798 /* Sources */,
+				6052A2AD2964E7370078E798 /* Frameworks */,
+				6052A2AE2964E7370078E798 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BridgeDeveloperToolkit;
+			productName = BridgeDeveloperToolkit;
+			productReference = 6052A2B02964E7370078E798 /* BridgeDeveloperToolkit.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6052A2C02964E7390078E798 /* BridgeDeveloperToolkitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6052A2D82964E73A0078E798 /* Build configuration list for PBXNativeTarget "BridgeDeveloperToolkitTests" */;
+			buildPhases = (
+				6052A2BD2964E7390078E798 /* Sources */,
+				6052A2BE2964E7390078E798 /* Frameworks */,
+				6052A2BF2964E7390078E798 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6052A2C32964E7390078E798 /* PBXTargetDependency */,
+			);
+			name = BridgeDeveloperToolkitTests;
+			productName = BridgeDeveloperToolkitTests;
+			productReference = 6052A2C12964E7390078E798 /* BridgeDeveloperToolkitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6052A2CA2964E73A0078E798 /* BridgeDeveloperToolkitUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6052A2DB2964E73A0078E798 /* Build configuration list for PBXNativeTarget "BridgeDeveloperToolkitUITests" */;
+			buildPhases = (
+				6052A2C72964E73A0078E798 /* Sources */,
+				6052A2C82964E73A0078E798 /* Frameworks */,
+				6052A2C92964E73A0078E798 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6052A2CD2964E73A0078E798 /* PBXTargetDependency */,
+			);
+			name = BridgeDeveloperToolkitUITests;
+			productName = BridgeDeveloperToolkitUITests;
+			productReference = 6052A2CB2964E73A0078E798 /* BridgeDeveloperToolkitUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6052A2A82964E7370078E798 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1420;
+				LastUpgradeCheck = 1420;
+				TargetAttributes = {
+					6052A2AF2964E7370078E798 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					6052A2C02964E7390078E798 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 6052A2AF2964E7370078E798;
+					};
+					6052A2CA2964E73A0078E798 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 6052A2AF2964E7370078E798;
+					};
+				};
+			};
+			buildConfigurationList = 6052A2AB2964E7370078E798 /* Build configuration list for PBXProject "BridgeDeveloperToolkit" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6052A2A72964E7370078E798;
+			productRefGroup = 6052A2B12964E7370078E798 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6052A2AF2964E7370078E798 /* BridgeDeveloperToolkit */,
+				6052A2C02964E7390078E798 /* BridgeDeveloperToolkitTests */,
+				6052A2CA2964E73A0078E798 /* BridgeDeveloperToolkitUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6052A2AE2964E7370078E798 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6052A2BB2964E7390078E798 /* Preview Assets.xcassets in Resources */,
+				6052A2B82964E7390078E798 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6052A2BF2964E7390078E798 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6052A2C92964E73A0078E798 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6052A2AC2964E7370078E798 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6052A2B62964E7370078E798 /* ContentView.swift in Sources */,
+				6052A2B42964E7370078E798 /* BridgeDeveloperToolkitApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6052A2BD2964E7390078E798 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6052A2C62964E7390078E798 /* BridgeDeveloperToolkitTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6052A2C72964E73A0078E798 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6052A2D02964E73A0078E798 /* BridgeDeveloperToolkitUITests.swift in Sources */,
+				6052A2D22964E73A0078E798 /* BridgeDeveloperToolkitUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6052A2C32964E7390078E798 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6052A2AF2964E7370078E798 /* BridgeDeveloperToolkit */;
+			targetProxy = 6052A2C22964E7390078E798 /* PBXContainerItemProxy */;
+		};
+		6052A2CD2964E73A0078E798 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6052A2AF2964E7370078E798 /* BridgeDeveloperToolkit */;
+			targetProxy = 6052A2CC2964E73A0078E798 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		6052A2D32964E73A0078E798 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6052A2D42964E73A0078E798 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		6052A2D62964E73A0078E798 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BridgeDeveloperToolkit/BridgeDeveloperToolkit.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BridgeDeveloperToolkit/Preview Content\"";
+				DEVELOPMENT_TEAM = KA9Z8R6M6K;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.sagebase.BridgeDeveloperToolkit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		6052A2D72964E73A0078E798 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BridgeDeveloperToolkit/BridgeDeveloperToolkit.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BridgeDeveloperToolkit/Preview Content\"";
+				DEVELOPMENT_TEAM = KA9Z8R6M6K;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.sagebase.BridgeDeveloperToolkit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		6052A2D92964E73A0078E798 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KA9Z8R6M6K;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.sagebase.BridgeDeveloperToolkitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BridgeDeveloperToolkit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BridgeDeveloperToolkit";
+			};
+			name = Debug;
+		};
+		6052A2DA2964E73A0078E798 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KA9Z8R6M6K;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.sagebase.BridgeDeveloperToolkitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BridgeDeveloperToolkit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BridgeDeveloperToolkit";
+			};
+			name = Release;
+		};
+		6052A2DC2964E73A0078E798 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KA9Z8R6M6K;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.sagebase.BridgeDeveloperToolkitUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = BridgeDeveloperToolkit;
+			};
+			name = Debug;
+		};
+		6052A2DD2964E73A0078E798 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KA9Z8R6M6K;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.sagebase.BridgeDeveloperToolkitUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = BridgeDeveloperToolkit;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6052A2AB2964E7370078E798 /* Build configuration list for PBXProject "BridgeDeveloperToolkit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6052A2D32964E73A0078E798 /* Debug */,
+				6052A2D42964E73A0078E798 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6052A2D52964E73A0078E798 /* Build configuration list for PBXNativeTarget "BridgeDeveloperToolkit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6052A2D62964E73A0078E798 /* Debug */,
+				6052A2D72964E73A0078E798 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6052A2D82964E73A0078E798 /* Build configuration list for PBXNativeTarget "BridgeDeveloperToolkitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6052A2D92964E73A0078E798 /* Debug */,
+				6052A2DA2964E73A0078E798 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6052A2DB2964E73A0078E798 /* Build configuration list for PBXNativeTarget "BridgeDeveloperToolkitUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6052A2DC2964E73A0078E798 /* Debug */,
+				6052A2DD2964E73A0078E798 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6052A2A82964E7370078E798 /* Project object */;
+}
