@@ -45,6 +45,7 @@
 		6052A2CB2964E73A0078E798 /* BridgeDeveloperToolkitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BridgeDeveloperToolkitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6052A2CF2964E73A0078E798 /* BridgeDeveloperToolkitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDeveloperToolkitUITests.swift; sourceTree = "<group>"; };
 		6052A2D12964E73A0078E798 /* BridgeDeveloperToolkitUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeDeveloperToolkitUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		60643A0D298321E100645537 /* BridgeDevSetupScript.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BridgeDevSetupScript.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +101,7 @@
 				6052A2B72964E7390078E798 /* Assets.xcassets */,
 				6052A2BC2964E7390078E798 /* BridgeDeveloperToolkit.entitlements */,
 				6052A2B92964E7390078E798 /* Preview Content */,
+				60643A0D298321E100645537 /* BridgeDevSetupScript.sh */,
 			);
 			path = BridgeDeveloperToolkit;
 			sourceTree = "<group>";
@@ -136,6 +138,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6052A2D52964E73A0078E798 /* Build configuration list for PBXNativeTarget "BridgeDeveloperToolkit" */;
 			buildPhases = (
+				60643A0C2983216000645537 /* ShellScript */,
 				6052A2AC2964E7370078E798 /* Sources */,
 				6052A2AD2964E7370078E798 /* Frameworks */,
 				6052A2AE2964E7370078E798 /* Resources */,
@@ -253,6 +256,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		60643A0C2983216000645537 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/zsh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nzsh ./BridgeDeveloperToolkit/BridgeDevSetupScript.sh\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6052A2AC2964E7370078E798 /* Sources */ = {
@@ -424,6 +447,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -451,6 +475,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
