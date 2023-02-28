@@ -119,31 +119,25 @@ install_corretto() {
     print "Deleting .pkg..."
     rm -f "$corretto8pkg"
 
-    # check if corretto is being overridden by a "newer" Java version.
-    # (Oracle uses a different build number scheme for its Internet applet plug-in which makes it look newer
-    # than even later builds of the same minor revision.)
-    jhome=`/usr/libexec/java_home`
-    if [[ ! ("$jhome" =~ corretto) ]]; then
-        # set $JAVA_HOME to corretto in ~/.zshenv
-        jhomercfile="~/.zshenv"
-        print "Setting JAVA_HOME and JAVA_VERSION in \"$jhomercfile\"..."
-        corretto_home=`/usr/libexec/java_home -V 2>/dev/null | egrep -o '/.*corretto.*$'`
-        corretto_version=`
-        java_home_export="export JAVA_HOME=\"$corretto_home\""
-        java_version_export=`/usr/libexec/java_home -V 2>&1 1>/dev/null | sed -En 's/^[[:space:]]+([^[:space:]]*).*$/\1/p'`
-        # TODO emm 2023-02-27 check if the exports already exist--if they're identical, don't re-add;
-        # if different, remove the old ones first
-        if [[ ! -e "$jhomercfile" ]]; then
-            # create the rc file and add the exports
-            print "\n# set by $0\n$java_home_export\n$java_version_export" > "$jhomercfile"
-        else
-            # append it to the end (leave any previous export there for if/when we remove this line)
-            print "\n# set by $0\n$java_home_export\n$java_version_export" >> "$jhomercfile"
-        fi
-        
-        # now load it into the current environment
-        source "$jhomercfile"
+    # Set $JAVA_HOME and $JAVA_VERSION to corretto in ~/.zshenv
+    jhomercfile="~/.zshenv"
+    print "Setting JAVA_HOME and JAVA_VERSION in \"$jhomercfile\"..."
+    corretto_home=`/usr/libexec/java_home -V 2>/dev/null | egrep -o '/.*corretto.*$'`
+    corretto_version=`
+    java_home_export="export JAVA_HOME=\"$corretto_home\""
+    java_version_export=`/usr/libexec/java_home -V 2>&1 1>/dev/null | sed -En 's/^[[:space:]]+([^[:space:]]*).*$/\1/p'`
+    # TODO emm 2023-02-27 check if the exports already exist--if they're identical, don't re-add;
+    # if different, remove the old ones first
+    if [[ ! -e "$jhomercfile" ]]; then
+        # create the rc file and add the exports
+        print "\n# set by $0\n$java_home_export\n$java_version_export" > "$jhomercfile"
+    else
+        # append it to the end (leave any previous export there for if/when we remove this line)
+        print "\n# set by $0\n$java_home_export\n$java_version_export" >> "$jhomercfile"
     fi
+    
+    # now load it into the current environment
+    source "$jhomercfile"
     print "Corretto 8 is now the active Java version."
 }
 
