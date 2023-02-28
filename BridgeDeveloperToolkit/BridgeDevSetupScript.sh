@@ -126,15 +126,19 @@ install_corretto() {
     if [[ ! ("$jhome" =~ corretto) ]]; then
         # set $JAVA_HOME to corretto in ~/.zshenv
         jhomercfile="~/.zshenv"
-        print "A higher-numbered Java version is already installed. Setting JAVA_HOME in \"$jhomercfile\"..."
-        corretto_home="/usr/libexec/java_home -V 2>&1 | egrep -o '/.*corretto.*$'`
-        java_home_export='export JAVA_HOME=$()
+        print "Setting JAVA_HOME and JAVA_VERSION in \"$jhomercfile\"..."
+        corretto_home=`/usr/libexec/java_home -V 2>/dev/null | egrep -o '/.*corretto.*$'`
+        corretto_version=`
+        java_home_export="export JAVA_HOME=\"$corretto_home\""
+        java_version_export=`/usr/libexec/java_home -V 2>&1 1>/dev/null | sed -En 's/^[[:space:]]+([^[:space:]]*).*$/\1/p'`
+        # TODO emm 2023-02-27 check if the exports already exist--if they're identical, don't re-add;
+        # if different, remove the old ones first
         if [[ ! -e "$jhomercfile" ]]; then
-            # create the rc file and add the export
-            print "\n# set by $0\n$corretto_export" > "$jhomercfile"
+            # create the rc file and add the exports
+            print "\n# set by $0\n$java_home_export\n$java_version_export" > "$jhomercfile"
         else
             # append it to the end (leave any previous export there for if/when we remove this line)
-            print "\n# set by $0\nexport JAVA_HOME=\"$corretto_home\"" >> "$jhomercfile"
+            print "\n# set by $0\n$java_home_export\n$java_version_export" >> "$jhomercfile"
         fi
         
         # now load it into the current environment
@@ -236,6 +240,15 @@ install_web_dev_tools() {
     print '= Installing/updating Web dev environment ='
     print '==========================================='
     print "\n"
+    
+    # Per Alina:
+    # - fork https://github.com/Sage-Bionetworks/mtb
+    # - download your fork and set up upstream/origin as you would any other project with origin to your fork and upstream to Sage-Bionetworks
+    # - download and install VS Code: https://code.visualstudio.com/
+    # - open the project directory from vscode
+    # - yarn install  to install the dependencies
+    # - yarn start to start the app.
+    # One detail is that the app will start on localhost. You would need to have it in your browser to ip address http://127.0.0.1:3000/ -- otherwise authentication will not work.
 }
 
 uninstall_web_dev_tools() {
