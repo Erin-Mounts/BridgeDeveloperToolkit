@@ -52,14 +52,14 @@ install_ios_dev_tools() {
 
         if $xcodeUpdated; then
             # launch Xcode to trigger request to install/update additional tools
-            xcodeInstall=`mdfind -name 'Xcode.app' 2>/dev/null`; open $xcodeInstall
+            open -a Xcode
             print "\n"
             read -q 'anyKey?Please install Xcode additional tools. When installation has finished, hit any key to continue: '
         fi
     else
         print 'If you need to install or update the iOS development environment, please open\
-        a new Terminal window, copy and paste in the following line, then hit return or enter:)'
-        print "cd `pwd`; zsh $0"
+        a new Terminal window, copy and paste in the following line, then hit return or enter:'
+        print "cd `pwd`; sudo zsh $0"
     fi
 }
 
@@ -120,19 +120,21 @@ install_corretto() {
     rm -f "$corretto8pkg"
 
     # Set $JAVA_HOME and $JAVA_VERSION to corretto in ~/.zshenv
-    jhomercfile="~/.zshenv"
+    jhomercfile=~/.zshenv
     print "Setting JAVA_HOME and JAVA_VERSION in \"$jhomercfile\"..."
     corretto_home=`/usr/libexec/java_home -V 2>/dev/null | egrep -o '/.*corretto.*$'`
-    corretto_version=`
     java_home_export="export JAVA_HOME=\"$corretto_home\""
     java_version_export=`/usr/libexec/java_home -V 2>&1 1>/dev/null | sed -En 's/^[[:space:]]+([^[:space:]]*).*$/\1/p'`
-    # TODO emm 2023-02-27 check if the exports already exist--if they're identical, don't re-add;
-    # if different, remove the old ones first
+    timestamp=$(date -j -f "%a %b %d %T %Z %Y" "`date`" "+%s")
+    # TODO emm 2023-02-27 check if the exports already exist and if so, overwrite instead
     if [[ ! -e "$jhomercfile" ]]; then
         # create the rc file and add the exports
         print "\n# set by $0\n$java_home_export\n$java_version_export" > "$jhomercfile"
     else
-        # append it to the end (leave any previous export there for if/when we remove this line)
+        # make a backup copy of the rc file appending a timestamp extension
+        cp "$jhomercfile" "$jhomercfile.$timestamp"
+        
+        # append it to the end
         print "\n# set by $0\n$java_home_export\n$java_version_export" >> "$jhomercfile"
     fi
     
@@ -180,9 +182,49 @@ uninstall_intellij() {
 
 # install/update MacPorts
 
+install_macports() {
+    # If we're not in an interactive shell, we can't ask questions or wait for input, so we
+    # kind of have to assume this has all been taken care of manually beforehand. Most likely,
+    # it means we're running as a Run Script Build Phase in Xcode anyway.
+
+    if [[ -t 0 ]]; then
+        print "\n"
+        print "Downloading MacPorts installer .pkg for macOS Ventura..."
+        macportspkgurl="https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-13-Ventura.pkg"
+        macportspkg="MacPorts.pkg"
+        curl -L $curl_progress "$macportspkgurl" -o "$macportspkg"
+        open "$macportspkg"
+        print "\n"
+        read -q 'anyKey?When the installer package finishes installing MacPorts, hit any key to continue: '
+
+        print "Deleting .pkg..."
+        rm -f "$macportspkg"
+    fi
+}
+
+uninstall_macports() {
+    # TODO emm 2023-03-10
+}
+
 # install/update Maven
 
+install_maven() {
+    sudo port install maven3
+}
+
+uninstall_maven() {
+    # TODO emm 2023-03-10
+}
+
 # install/update Redis
+
+install_redis() {
+    sudo port install redis
+}
+
+uninstall_redis() {
+    # TODO emm 2023-03-10
+}
 
 # install/update MySQL
 
@@ -248,6 +290,13 @@ install_web_dev_tools() {
 uninstall_web_dev_tools() {
     # TODO emm 2023-02-01
 }
+
+if [[ `whoami` != root ]]; then
+    print "Please run this script as root or with sudo (e.g. by copying the following\n"
+    print "line, pasting it into a Terminal window, and hitting return or enter):\n"
+    print "cd `pwd`; sudo zsh $0"
+    exit 1
+fi
 
 #install_ios_dev_tools
 install_bridge_dev_tools
