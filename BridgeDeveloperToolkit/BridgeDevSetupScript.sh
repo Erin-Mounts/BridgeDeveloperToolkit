@@ -281,10 +281,38 @@ install_web_dev_tools() {
     # - fork https://github.com/Sage-Bionetworks/mtb
     # - download your fork and set up upstream/origin as you would any other project with origin to your fork and upstream to Sage-Bionetworks
     # - download and install VS Code: https://code.visualstudio.com/
+    install_vscode()
+    
     # - open the project directory from vscode
     # - yarn install  to install the dependencies
     # - yarn start to start the app.
     # One detail is that the app will start on localhost. You would need to have it in your browser to ip address http://127.0.0.1:3000/ -- otherwise authentication will not work.
+}
+
+install_vscode() {
+    print "\n"
+    print "Downloading latest Visual Studio Code stable universal Darwin app .zip..."
+    vscodeurl='https://code.visualstudio.com/sha/download?build=stable&os=darwin-universal'
+    vscodezipfile='VSCode-darwin-universal.zip'
+    vscodeapp='Visual Studio Code.app'
+    curl -L $curl_progress "$vscodeurl" -o "$vscodezipfile"
+    print "Unzipping Visual Studio Code..."
+    open "$vscodezipfile"
+    print "Syncing Visual Studio Code app to /Applications folder..."
+    rsync -a "$vscodeapp" "/Applications/"; synced=$?
+    if [[ $synced -eq 0 ]]; then
+        print "Visual Studio Code app successfully installed/updated in /Applications folder"
+    else
+        print "Failed to install/update Visual Studio Code app in /Applications folder, rsync exit code $synced"
+    fi
+    print "Deleting original unzipped Visual Studio Code app..."
+    rm -rf "$vscodeapp"
+    print "Deleting .zip file..."
+    rm -f "$vscodezipfile"
+}
+
+uninstall_vscode() {
+    # TODO emm 2023-03-15
 }
 
 uninstall_web_dev_tools() {
