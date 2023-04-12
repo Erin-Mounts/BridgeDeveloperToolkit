@@ -18,11 +18,11 @@ fi
 
 ##################################################################################################
 #
-# Install/update iOS dev environment (Xcode, including additional tools)
+# Install/update Xcode and set up cli tools
 #
 ##################################################################################################
 
-install_ios_dev_tools() {
+install_xcode() {
     # If we're not in an interactive shell, we can't ask questions or wait for input, so we
     # kind of have to assume this has all been taken care of manually beforehand. Most likely,
     # it means we're running as a Run Script Build Phase in Xcode anyway.
@@ -61,10 +61,20 @@ install_ios_dev_tools() {
         a new Terminal window, copy and paste in the following line, then hit return or enter:'
         print "cd `pwd`; sudo zsh $0"
     fi
+    sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
 }
 
+##################################################################################################
+#
+# Install/update iOS dev environment
+#
+##################################################################################################
+
+install_ios_dev_tools() {
+    #TODO: emm 2023-04-11: fork/clone core repos for developing Sage ios apps
+}
 uninstall_ios_dev_tools() {
-    # TODO emm 2023-02-01
+    #TODO: emm 2023-02-01
 }
 
 ##################################################################################################
@@ -99,17 +109,23 @@ install_bridge_dev_tools() {
 
     install_corretto
     install_intellij
+    install_maven
+    install_redis
 }
 
 uninstall_bridge_dev_tools() {
-    uninstall_corretto
+    uninstall_redis
+    uninstall_maven
     uninstall_intellij
+    uninstall_corretto
 }
 
 # install/update Corretto 8
 install_corretto() {
+    pushd ~/Downloads
+    
     print "\n"
-    print "Downloading latest Corretto 8 .pkg..."
+    print "Downloading latest Corretto 8 .pkg to `pwd`..."
     corretto8pkg="corretto.pkg"
     curl -L $curl_progress "$corretto8url" -o "$corretto8pkg"
 
@@ -119,6 +135,8 @@ install_corretto() {
     print "Deleting .pkg..."
     rm -f "$corretto8pkg"
 
+    popd
+    
     # Set $JAVA_HOME and $JAVA_VERSION to corretto in ~/.zshenv
     jhomercfile=~/.zshenv
     print "Setting JAVA_HOME and JAVA_VERSION in \"$jhomercfile\"..."
@@ -126,7 +144,7 @@ install_corretto() {
     java_home_export="export JAVA_HOME=\"$corretto_home\""
     java_version_export=`/usr/libexec/java_home -V 2>&1 1>/dev/null | sed -En 's/^[[:space:]]+([^[:space:]]*).*$/\1/p'`
     timestamp=$(date -j -f "%a %b %d %T %Z %Y" "`date`" "+%s")
-    # TODO emm 2023-02-27 check if the exports already exist and if so, overwrite instead
+    #TODO: emm 2023-02-27 check if the exports already exist and if so, overwrite instead
     if [[ ! -e "$jhomercfile" ]]; then
         # create the rc file and add the exports
         print "\n# set by $0\n$java_home_export\n$java_version_export" > "$jhomercfile"
@@ -144,14 +162,16 @@ install_corretto() {
 }
 
 uninstall_corretto() {
-    # TODO emm 2023-02-01
+    #TODO: emm 2023-02-01
 }
 
 # install/update IntelliJ
 
 install_intellij() {
+    pushd ~/Downloads
+    
     print "\n"
-    print "Downloading latest IntelliJ Community Edition .dmg..."
+    print "Downloading latest IntelliJ Community Edition .dmg to `pwd`..."
     jetbrainsdmg="jetbrains.dmg"
     curl -L $curl_progress "$jetbrainsurl" -o "$jetbrainsdmg"
 
@@ -174,10 +194,12 @@ install_intellij() {
     fi
     print "Deleting .dmg..."
     rm -f "$jetbrainsdmg"
+    
+    popd
 }
 
 uninstall_intellij() {
-    # TODO emm 2023-02-01
+    #TODO: emm 2023-02-01
 }
 
 # install/update MacPorts
@@ -188,8 +210,10 @@ install_macports() {
     # it means we're running as a Run Script Build Phase in Xcode anyway.
 
     if [[ -t 0 ]]; then
+        pushd ~/Downloads
+    
         print "\n"
-        print "Downloading MacPorts installer .pkg for macOS Ventura..."
+        print "Downloading MacPorts installer .pkg for macOS Ventura to `pwd`..."
         macportspkgurl="https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-13-Ventura.pkg"
         macportspkg="MacPorts.pkg"
         curl -L $curl_progress "$macportspkgurl" -o "$macportspkg"
@@ -199,31 +223,50 @@ install_macports() {
 
         print "Deleting .pkg..."
         rm -f "$macportspkg"
+        
+        popd
     fi
 }
 
 uninstall_macports() {
-    # TODO emm 2023-03-10
+    #TODO: emm 2023-03-10
+}
+
+# install/update GitHub CLI
+install_githubcli() {
+    sudo /opt/local/bin/port install gh
+    
+    # If we're not in an interactive shell, we can't ask questions or wait for input, so we
+    # kind of have to assume this has all been taken care of manually beforehand. Most likely,
+    # it means we're running as a Run Script Build Phase in Xcode anyway.
+
+    if [[ -t 0 ]]; then
+        /opt/local/bin/gh auth login
+    fi
+}
+
+uninstall_githubcli() {
+    #TODO emm 2023-04-11
 }
 
 # install/update Maven
 
 install_maven() {
-    sudo port install maven3
+    sudo /opt/local/bin/port install maven3
 }
 
 uninstall_maven() {
-    # TODO emm 2023-03-10
+    #TODO: emm 2023-03-10
 }
 
 # install/update Redis
 
 install_redis() {
-    sudo port install redis
+    sudo /opt/local/bin/port install redis
 }
 
 uninstall_redis() {
-    # TODO emm 2023-03-10
+    #TODO: emm 2023-03-10
 }
 
 # install/update MySQL
@@ -261,7 +304,7 @@ install_android_dev_tools() {
 }
 
 uninstall_android_dev_tools() {
-    # TODO emm 2023-02-01
+    #TODO: emm 2023-02-01
 }
 
 ##################################################################################################
@@ -280,13 +323,31 @@ install_web_dev_tools() {
     # Per Alina:
     # - fork https://github.com/Sage-Bionetworks/mtb
     # - download your fork and set up upstream/origin as you would any other project with origin to your fork and upstream to Sage-Bionetworks
+    fork_mtb
+    
     # - download and install VS Code: https://code.visualstudio.com/
-    install_vscode()
+    install_vscode
     
     # - open the project directory from vscode
     # - yarn install  to install the dependencies
     # - yarn start to start the app.
-    # One detail is that the app will start on localhost. You would need to have it in your browser to ip address http://127.0.0.1:3000/ -- otherwise authentication will not work.
+    # One detail is that the app will start on localhost.
+    # You would need to have it in your browser to ip address http://127.0.0.1:3000/ --
+    # otherwise authentication will not work.
+}
+
+fork_mtb() {
+    # check if the repo already exists; if not, clone and then fork it
+    #TODO: Figure out where to default this to
+    REPOHOME="/Volumes/Tereshkova/Development/Sage"
+    if [[ ! -e "$REPOHOME/mtb" ]]; then
+        pushd $REPOHOME
+        /opt/local/bin/gh repo clone Sage-Bionetworks/mtb
+        pushd mtb
+        /opt/local/bin/gh repo fork --remote=true
+        popd
+        popd
+    fi
 }
 
 install_vscode() {
@@ -295,9 +356,12 @@ install_vscode() {
     vscodeurl='https://code.visualstudio.com/sha/download?build=stable&os=darwin-universal'
     vscodezipfile='VSCode-darwin-universal.zip'
     vscodeapp='Visual Studio Code.app'
+    pushd ~/Downloads
+    
+    print "Downloading into `pwd` directory"
     curl -L $curl_progress "$vscodeurl" -o "$vscodezipfile"
     print "Unzipping Visual Studio Code..."
-    open "$vscodezipfile"
+    unzip "$vscodezipfile"
     print "Syncing Visual Studio Code app to /Applications folder..."
     rsync -a "$vscodeapp" "/Applications/"; synced=$?
     if [[ $synced -eq 0 ]]; then
@@ -309,14 +373,15 @@ install_vscode() {
     rm -rf "$vscodeapp"
     print "Deleting .zip file..."
     rm -f "$vscodezipfile"
+    popd
 }
 
 uninstall_vscode() {
-    # TODO emm 2023-03-15
+    #TODO: emm 2023-03-15
 }
 
 uninstall_web_dev_tools() {
-    # TODO emm 2023-02-01
+    #TODO: emm 2023-02-01
 }
 
 if [[ `whoami` != root ]]; then
@@ -326,9 +391,12 @@ if [[ `whoami` != root ]]; then
     exit 1
 fi
 
+#install_xcode
+#install_macports
+#install_githubcli
 #install_ios_dev_tools
-install_bridge_dev_tools
+#install_bridge_dev_tools
 #install_android_dev_tools
-#install_web_dev_tools
+install_web_dev_tools
 
 print Done running $0
