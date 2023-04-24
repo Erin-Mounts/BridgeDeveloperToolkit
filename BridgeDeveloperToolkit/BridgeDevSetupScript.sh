@@ -241,7 +241,7 @@ uninstall_macports() {
 port_install() {
     args=()
     while (( $# )); do
-        sudo /opt/local/bin/port install $1
+        sudo port install $1
         shift
     done
 }
@@ -255,7 +255,7 @@ install_githubcli() {
     # it means we're running as a Run Script Build Phase in Xcode anyway.
 
     if [[ -t 0 ]]; then
-        /opt/local/bin/gh auth login
+        gh auth login
     fi
 }
 
@@ -345,6 +345,14 @@ install_web_dev_tools() {
     # - open the project directory from vscode
     # - yarn install  to install the dependencies
     # - yarn start to start the app.
+    # -- (emm 2023-04-26 even in VSCode terminal, can't find yarn so we need to install it)
+    port_install yarn
+    # -- (emm 2023-04-26 can't find a way to get this to happen in VSCode via this script)
+    pushd "$REPOHOME/mtb"
+    yarn install
+    yarn start
+    popd
+    
     # One detail is that the app will start on localhost.
     # You would need to have it in your browser to ip address http://127.0.0.1:3000/ --
     # otherwise authentication will not work.
@@ -352,8 +360,6 @@ install_web_dev_tools() {
 
 fork_mtb() {
     # check if the repo already exists; if not, clone and then fork it
-    #TODO: Figure out where to default this to
-    REPOHOME="/Volumes/Tereshkova/Development/Sage"
     if [[ ! -e "$REPOHOME/mtb" ]]; then
         pushd $REPOHOME
         /opt/local/bin/gh repo clone Sage-Bionetworks/mtb
@@ -433,6 +439,14 @@ zparseopts -D -E -F -a install_flags - x+ -xcode+ m+ -macports+ g+ -gh+ i+ -iOS+
 # remove first -- or -
 end_opts=$@[(i)(--|-)]
 set -- "${@[0,end_opts-1]}" "${@[end_opts+1,-1]}"
+
+# set up path to prioritize MacPorts binaries for the duration of the script
+macPortsBin=/opt/local/bin
+PATH="${macPortsBin}:${PATH}"
+
+# set up where to clone GitHub repos
+#TODO: Figure out where to default this to
+REPOHOME="/Volumes/Tereshkova/Development/Sage"
 
 #print "install_flags: ${install_flags}"
 #if install_all; then
