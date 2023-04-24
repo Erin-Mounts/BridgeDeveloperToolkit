@@ -28,9 +28,9 @@ install_xcode() {
     # it means we're running as a Run Script Build Phase in Xcode anyway.
 
     if [[ -t 0 ]]; then
-        print '==========================================='
-        print '= Installing/updating iOS dev environment ='
-        print '==========================================='
+        print '============================='
+        print '= Installing/updating Xcode ='
+        print '============================='
         print "\n"
 
         xcodeurl='macappstore://apps.apple.com/us/app/xcode/id497799835?mt=12'
@@ -71,6 +71,11 @@ install_xcode() {
 ##################################################################################################
 
 install_ios_dev_tools() {
+    print '==========================================='
+    print '= Installing/updating iOS dev environment ='
+    print '==========================================='
+    print "\n"
+
     #TODO: emm 2023-04-11: fork/clone core repos for developing Sage ios apps
 }
 uninstall_ios_dev_tools() {
@@ -232,9 +237,18 @@ uninstall_macports() {
     #TODO: emm 2023-03-10
 }
 
+# install (a) MacPort(s)
+port_install() {
+    args=()
+    while (( $# )); do
+        sudo /opt/local/bin/port install $1
+        shift
+    done
+}
+
 # install/update GitHub CLI
 install_githubcli() {
-    sudo /opt/local/bin/port install gh
+    port_install gh
     
     # If we're not in an interactive shell, we can't ask questions or wait for input, so we
     # kind of have to assume this has all been taken care of manually beforehand. Most likely,
@@ -252,7 +266,7 @@ uninstall_githubcli() {
 # install/update Maven
 
 install_maven() {
-    sudo /opt/local/bin/port install maven3
+    port_install maven3
 }
 
 uninstall_maven() {
@@ -262,7 +276,7 @@ uninstall_maven() {
 # install/update Redis
 
 install_redis() {
-    sudo /opt/local/bin/port install redis
+    port_install redis
 }
 
 uninstall_redis() {
@@ -384,19 +398,89 @@ uninstall_web_dev_tools() {
     #TODO: emm 2023-02-01
 }
 
+##################################################################################################
+#
+# Main body
+#
+##################################################################################################
+
+# If install_flags array is empty, we want to install everything
+install_all() {
+    return $#install_flags # unix shell: 0 is success, nonzero is failure
+}
+
+# Check if install_flags array contains a value (arg 1)
+has_install_flag() {
+    args=()
+    if [[ ${install_flags[(r)$1]} == $1 ]]; then
+        true
+    else
+        false
+    fi
+}
+
 if [[ `whoami` != root ]]; then
     print "Please run this script as root or with sudo (e.g. by copying the following\n"
     print "line, pasting it into a Terminal window, and hitting return or enter):\n"
-    print "cd `pwd`; sudo zsh $0"
+    print "cd `pwd`; sudo zsh $@"
     exit 1
 fi
 
-#install_xcode
-#install_macports
-#install_githubcli
-#install_ios_dev_tools
-#install_bridge_dev_tools
-#install_android_dev_tools
-install_web_dev_tools
+# parse command line options
+zparseopts -D -E -F -a install_flags - x+ -xcode+ m+ -macports+ g+ -gh+ i+ -iOS+ a+ -android+\
+        b+ -bridge+ w+ -web+ || exit 1
+
+# remove first -- or -
+end_opts=$@[(i)(--|-)]
+set -- "${@[0,end_opts-1]}" "${@[end_opts+1,-1]}"
+
+#print "install_flags: ${install_flags}"
+#if install_all; then
+#    print "install_flags contains $#install_flags items, treating this as true"
+#else
+#    print "install_flags contains $#install_flags items, treating this as false"
+#fi
+#
+#if has_install_flag -i; then
+#    print "detected install flag -i"
+#else
+#    print "did not detect install flag -i"
+#fi
+
+# Install Xcode
+if install_all || has_install_flag '-x' || has_install_flag '--xcode'; then
+    install_xcode
+fi
+    
+# Install MacPorts
+if install_all || has_install_flag '-m' || has_install_flag '--macports'; then
+    install_macports
+fi
+    
+# Install GitHub command line interface
+if install_all || has_install_flag '-g' || has_install_flag '--gh'; then
+    install_githubcli
+fi
+    
+# Install iOS dev tools/environment
+if install_all || has_install_flag '-i' || has_install_flag '--iOS'; then
+    install_ios_dev_tools
+fi
+
+# Install Bridge dev tools/environment
+if install_all || has_install_flag '-b' || has_install_flag '--bridge'; then
+    install_bridge_dev_tools
+fi
+    
+# Install Android dev tools/environment
+if install_all || has_install_flag '-a' || has_install_flag '--android'; then
+    install_android_dev_tools
+fi
+    
+# Install Web dev tools/environment
+if install_all || has_install_flag '-w' || has_install_flag '--web'; then
+    install_web_dev_tools
+fi
+    
 
 print Done running $0
