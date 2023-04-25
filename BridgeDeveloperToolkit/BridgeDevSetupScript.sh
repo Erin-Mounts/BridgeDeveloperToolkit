@@ -448,19 +448,6 @@ PATH="${macPortsBin}:${PATH}"
 #TODO: Figure out where to default this to
 REPOHOME="/Volumes/Tereshkova/Development/Sage"
 
-#print "install_flags: ${install_flags}"
-#if install_all; then
-#    print "install_flags contains $#install_flags items, treating this as true"
-#else
-#    print "install_flags contains $#install_flags items, treating this as false"
-#fi
-#
-#if has_install_flag -i; then
-#    print "detected install flag -i"
-#else
-#    print "did not detect install flag -i"
-#fi
-
 # Install Xcode
 if install_all || has_install_flag '-x' || has_install_flag '--xcode'; then
     install_xcode
