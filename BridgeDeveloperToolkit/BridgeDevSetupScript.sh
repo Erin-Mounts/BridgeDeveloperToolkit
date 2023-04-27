@@ -347,15 +347,27 @@ install_web_dev_tools() {
     # - yarn start to start the app.
     # -- (emm 2023-04-26 even in VSCode terminal, can't find yarn so we need to install it)
     port_install yarn
-    # -- (emm 2023-04-26 can't find a way to get this to happen in VSCode via this script)
     pushd "$REPOHOME/mtb"
+
+    # - One detail is that the app will start on localhost.
+    # - You would need to have it in your browser to ip address http://127.0.0.1:3000/ --
+    # - otherwise authentication will not work.
+    # - To get started locally on 127.0.0.1: create .env.local file with HOST=127.0.0.1 inside of it.
+    envFile=".env.local"
+    if [[ ! -e "${envFile}" ]]; then
+        # create the env file and add the host
+        print "HOST=127.0.0.1\n" > "${envFile}"
+    fi
+    # -- (emm 2023-04-26 can't find a way to get this to happen in VSCode via this script)
     yarn install
+    
+    # TODO: emm 2023-04-27 installation and launch of services should be separated, with specific command line options
+    # - MTB starts on :3000 and arc on :3001
+    # - yarn start starts MTB
+    # - yarn start:arc start ARC
     yarn start
     popd
     
-    # One detail is that the app will start on localhost.
-    # You would need to have it in your browser to ip address http://127.0.0.1:3000/ --
-    # otherwise authentication will not work.
 }
 
 fork_mtb() {
