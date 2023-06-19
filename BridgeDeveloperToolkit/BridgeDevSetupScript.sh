@@ -6,7 +6,9 @@
 #  Created by Erin Mounts on 1/26/23.
 #
 
-print Running $0...
+SCRIPT_NAME="$0"
+
+print Running $SCRIPT_NAME $@ ...
 
 if [[ -t 0 ]]; then
     print "Running in a terminal"
@@ -50,6 +52,8 @@ install_xcode() {
             xcodeUpdated=true
         fi
 
+        print "\n"
+
         if $xcodeUpdated; then
             # launch Xcode to trigger request to install/update additional tools
             open -a Xcode
@@ -59,7 +63,7 @@ install_xcode() {
     else
         print 'If you need to install or update the iOS development environment, please open\
         a new Terminal window, copy and paste in the following line, then hit return or enter:'
-        print "cd `pwd`; sudo zsh $0"
+        print "cd `pwd`; sudo zsh $SCRIPT_NAME $@\n"
     fi
     sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
 }
@@ -101,11 +105,13 @@ install_bridge_dev_tools() {
         print "Detected Intel Mac"
         corretto8url='https://corretto.aws/downloads/latest/amazon-corretto-8-x64-macos-jdk.pkg'
         jetbrainsurl='https://download.jetbrains.com/product?code=IIC&latest&distribution=mac'
+        mysqlworkbenchurl='https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-8.0.33-macos-x86_64.dmg'
     else
         if [[ $machine =~ ^arm ]]; then
             print "Detected Apple Silicon Mac"
             corretto8url='https://corretto.aws/downloads/latest/amazon-corretto-8-aarch64-macos-jdk.pkg'
             jetbrainsurl='https://download.jetbrains.com/product?code=IIC&latest&distribution=macM1'
+            mysqlworkbenchurl='https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-8.0.33-macos-arm64.dmg'
         else
             print "Unsupported machine type $machine"
             exit 1
@@ -116,50 +122,62 @@ install_bridge_dev_tools() {
     install_intellij
     install_maven
     install_redis
+    install_mysql
 }
 
 uninstall_bridge_dev_tools() {
+    uninstall_mysql
     uninstall_redis
     uninstall_maven
     uninstall_intellij
     uninstall_corretto
 }
 
+# helper function to download and install an app from a .pkg
+download_and_install_app_from_pkg() {
+    # If we're not in an interactive shell, we can't ask questions or wait for input, so we
+    # kind of have to assume this has all been taken care of manually beforehand. Most likely,
+    # it means we're running as a Run Script Build Phase in Xcode anyway.
+
+    if [[ -t 0 ]]; then
+        args=()
+        appname=$1
+        downloadurl=$2
+        pkgname=$3
+        
+        pushd ~/Downloads
+    
+        print "\n"
+        print "Downloading $appname installer .pkg `pwd`..."
+        curl -L $curl_progress "$downloadurl" -o "$pkgname"
+        open "$pkgname"
+        print "\n"
+        read -q "anyKey?When the installer package finishes installing $appname, hit any key to continue: "
+
+        print "\nDeleting .pkg..."
+        rm -f "$pkgname"
+        
+        popd
+    fi
+}
+
 # install/update Corretto 8
 install_corretto() {
-    pushd ~/Downloads
-    
-    print "\n"
-    print "Downloading latest Corretto 8 .pkg to `pwd`..."
     corretto8pkg="corretto.pkg"
-    curl -L $curl_progress "$corretto8url" -o "$corretto8pkg"
-
-    open "$corretto8pkg"
-    read -q 'anyKey?Please follow the installer prompts to install Corretto 8. When installation has finished, hit any key to continue: '
-
-    print "Deleting .pkg..."
-    rm -f "$corretto8pkg"
-
-    popd
+    download_and_install_app_from_pkg "Corretto 8" "$corretto8url" "$corretto8pkg"
     
     # Set $JAVA_HOME and $JAVA_VERSION to corretto in ~/.zshenv
     jhomercfile=~/.zshenv
     print "Setting JAVA_HOME and JAVA_VERSION in \"$jhomercfile\"..."
     corretto_home=`/usr/libexec/java_home -V 2>/dev/null | egrep -o '/.*corretto.*$'`
-    java_home_export="export JAVA_HOME=\"$corretto_home\""
-    java_version_export=`/usr/libexec/java_home -V 2>&1 1>/dev/null | sed -En 's/^[[:space:]]+([^[:space:]]*).*$/\1/p'`
+    java_version=`/usr/libexec/java_home -V 2>&1 1>/dev/null | sed -En 's/^[[:space:]]+([^[:space:]]*).*$/\1/p'`
     timestamp=$(date -j -f "%a %b %d %T %Z %Y" "`date`" "+%s")
-    #TODO: emm 2023-02-27 check if the exports already exist and if so, overwrite instead
-    if [[ ! -e "$jhomercfile" ]]; then
-        # create the rc file and add the exports
-        print "\n# set by $0\n$java_home_export\n$java_version_export" > "$jhomercfile"
-    else
+    if [[ -e "$jhomercfile" ]]; then
         # make a backup copy of the rc file appending a timestamp extension
         cp "$jhomercfile" "$jhomercfile.$timestamp"
-        
-        # append it to the end
-        print "\n# set by $0\n$java_home_export\n$java_version_export" >> "$jhomercfile"
     fi
+    export_var_as_value_from_config_file "JAVA_HOME" "$corretto_home" "$jhomercfile"
+    export_var_as_value_from_config_file "JAVA_VERSION" "$java_version" "$jhomercfile"
     
     # now load it into the current environment
     source "$jhomercfile"
@@ -170,37 +188,47 @@ uninstall_corretto() {
     #TODO: emm 2023-02-01
 }
 
-# install/update IntelliJ
-
-install_intellij() {
+# helper function to download and install an app from a .dmg
+download_and_install_app_from_dmg() {
+    args=()
+    appname=$1
+    downloadurl=$2
+    dmgname=$3
+    
     pushd ~/Downloads
     
     print "\n"
-    print "Downloading latest IntelliJ Community Edition .dmg to `pwd`..."
-    jetbrainsdmg="jetbrains.dmg"
-    curl -L $curl_progress "$jetbrainsurl" -o "$jetbrainsdmg"
+    print "Downloading $appname .dmg to `pwd`..."
+    curl -L $curl_progress "$downloadurl" -o "$dmgname"
 
     # based loosely on https://stackoverflow.com/a/55869632
     print "Mounting .dmg..."
-    volume=$(hdiutil attach -nobrowse "$jetbrainsdmg" | tail -n1 | cut -f3-; exit ${PIPESTATUS[0]})
-    print "Copying IntelliJ app to /Applications folder..."
+    volume=$(hdiutil attach -nobrowse "$dmgname" | tail -n1 | cut -f3-; exit ${PIPESTATUS[0]})
+    print "Copying $appname app to /Applications folder..."
     rsync -a "$volume"/*.app "/Applications/"; synced=$?
     if [[ $synced -eq 0 ]]; then
-        print "IntelliJ app successfully installed in /Applications folder"
+        print "$appname app successfully installed in /Applications folder"
     else
-        print "Failed to install IntelliJ app in /Applications folder, rsync exit code $synced"
+        print "Failed to install $appname app in /Applications folder, rsync exit code $synced"
     fi
     print "Unmounting .dmg..."
     hdiutil detach -force -quiet "$volume"; detached=$?
     if [[ $detached -eq 0 ]]; then
-        print "Successfully unmounted IntelliJ install disk image"
+        print "Successfully unmounted $appname install disk image"
     else
-        print "Failed to unmount IntelliJ install disk image--please do it manually in Disk Utility"
+        print "Failed to unmount $appname install disk image--please do it manually in Disk Utility"
     fi
     print "Deleting .dmg..."
-    rm -f "$jetbrainsdmg"
+    rm -f "$dmgname"
     
     popd
+
+}
+
+# install/update IntelliJ
+install_intellij() {
+    jetbrainsdmg="jetbrains.dmg"
+    download_and_install_app_from_dmg "IntelliJ Community Edition" "$jetbrainsurl" "$jetbrainsdmg"
 }
 
 uninstall_intellij() {
@@ -210,27 +238,9 @@ uninstall_intellij() {
 # install/update MacPorts
 
 install_macports() {
-    # If we're not in an interactive shell, we can't ask questions or wait for input, so we
-    # kind of have to assume this has all been taken care of manually beforehand. Most likely,
-    # it means we're running as a Run Script Build Phase in Xcode anyway.
-
-    if [[ -t 0 ]]; then
-        pushd ~/Downloads
-    
-        print "\n"
-        print "Downloading MacPorts installer .pkg for macOS Ventura to `pwd`..."
-        macportspkgurl="https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-13-Ventura.pkg"
-        macportspkg="MacPorts.pkg"
-        curl -L $curl_progress "$macportspkgurl" -o "$macportspkg"
-        open "$macportspkg"
-        print "\n"
-        read -q 'anyKey?When the installer package finishes installing MacPorts, hit any key to continue: '
-
-        print "Deleting .pkg..."
-        rm -f "$macportspkg"
-        
-        popd
-    fi
+    macportspkgurl="https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-13-Ventura.pkg"
+    macportspkg="MacPorts.pkg"
+    download_and_install_app_from_pkg "MacPorts" "$macportspkgurl" "$macportspkg"
 }
 
 uninstall_macports() {
@@ -283,9 +293,75 @@ uninstall_redis() {
     #TODO: emm 2023-03-10
 }
 
+# helper function to download and install from a .pkg on a .dmg (why MySQL.com, why would you do this)
+download_and_install_app_from_pkg_on_dmg() {
+    # If we're not in an interactive shell, we can't ask questions or wait for input, so we
+    # kind of have to assume this has all been taken care of manually beforehand. Most likely,
+    # it means we're running as a Run Script Build Phase in Xcode anyway.
+
+    if [[ -t 0 ]]; then
+        args=()
+        appname=$1
+        downloadurl=$2
+        dmgname=$3
+        
+        print "\n"
+        print "Downloading $appname .dmg to `pwd`..."
+        curl -L $curl_progress "$downloadurl" -o "$dmgname"
+
+        # based loosely on https://stackoverflow.com/a/55869632
+        print "Mounting .dmg..."
+        volume=$(hdiutil attach -nobrowse "$dmgname" | tail -n1 | cut -f3-; exit ${PIPESTATUS[0]})
+        print "Opening installer .pkg..."
+        open "$volume/*.pkg"
+        print "\n"
+        read -q "anyKey?When the installer package finishes installing $appname, hit any key to continue: "
+
+
+        print "\nUnmounting .dmg..."
+        hdiutil detach -force -quiet "$volume"; detached=$?
+        if [[ $detached -eq 0 ]]; then
+            print "Successfully unmounted $appname install disk image"
+        else
+            print "Failed to unmount $appname install disk image--please do it manually in Disk Utility"
+        fi
+        print "Deleting .dmg..."
+        rm -f "$dmgname"
+    fi
+}
+
 # install/update MySQL
+install_mysql() {
+    mysqlurl="https://downloads.mysql.com/archives/get/p/23/file/mysql-5.7.31-macos10.14-x86_64.dmg"
+    mysqldmg="mysql-5.7.31-macos10.14-x86_64.dmg"
+    download_and_install_app_from_pkg_on_dmg "MySQL 5.7.31" "$mysqlurl" "$mysqldmg"
+    
+    pushd ~
+    
+    configfile=".my.cnf"
+    if [[ !e "${configfile}" ]]; then
+        # create the config file and populate it
+        echo "# $configfile file created by script $SCRIPT_NAME" > "$configfile"
+        echo "[mysqld]" >> "$configfile"
+        echo "bind-address = 127.0.0.1" >> "$configfile"
+        echo "sql-mode =" >> "${configfile}"
+    fi
+    
+    popd
+
+    mysqlworkbenchdmg="mysqlworkbench.dmg"
+    download_and_install_app_from_dmg "MySQL Workbench 8.0.33" "$mysqlworkbenchurl" "$mysqlworkbenchdmg"
+}
+
+uninstall_mysql() {
+    #TODO: emm 2023-05-12
+}
 
 # check for/create fork of BridgeServer2
+
+fork_bridgeserver2() {
+
+}
 
 # do initial setup
 
@@ -437,10 +513,44 @@ has_install_flag() {
     fi
 }
 
+# Check if a var is already being exported by a config file. If so, update it with the given value. If not, append it.
+# If the config file doesn't yet exist, create it with the specified export.
+# Adapted from code written for me by ChatGPT. ~emm 2023-05-11
+export_var_as_value_from_config_file() {
+    args=()
+    
+    # Set the name of the variable you're looking for
+    VAR_NAME=$1
+    shift
+
+    # Set the desired value of the variable
+    VAR_VALUE=$1
+    shift
+
+    # Get the path to the config file
+    CONFIG_FILE=$1
+
+    # Check if the config file exists
+    if [ ! -f "$CONFIG_FILE" ]; then
+        # If it doesn't exist, create it and add a line to export the variable
+        echo "# $CONFIG_FILE file created by script $SCRIPT_NAME" > "$CONFIG_FILE"
+        echo "export $VAR_NAME=\"$VAR_VALUE\"" >> "$CONFIG_FILE"
+    else
+        # If it exists, check if the variable is already exported
+        if grep -q "export $VAR_NAME=" "$CONFIG_FILE"; then
+            # If it is, replace the existing value with the new value
+            sed -i "s/export $VAR_NAME=.*/export $VAR_NAME=\"$VAR_VALUE\"/" "$CONFIG_FILE"
+        else
+            # If it isn't, add a new line to export the variable with the desired value
+            echo "export $VAR_NAME=\"$VAR_VALUE\"" >> "$CONFIG_FILE"
+        fi
+    fi
+}
+
 if [[ `whoami` != root ]]; then
     print "Please run this script as root or with sudo (e.g. by copying the following\n"
     print "line, pasting it into a Terminal window, and hitting return or enter):\n"
-    print "cd `pwd`; sudo zsh $@"
+    print "cd `pwd`; sudo zsh $SCRIPT_NAME $@"
     exit 1
 fi
 
@@ -496,4 +606,4 @@ if install_all || has_install_flag '-w' || has_install_flag '--web'; then
 fi
     
 
-print Done running $0
+print Done running $SCRIPT_NAME $@
