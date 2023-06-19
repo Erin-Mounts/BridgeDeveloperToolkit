@@ -391,6 +391,24 @@ install_android_dev_tools() {
     print '= Installing/updating Android dev environment ='
     print '==============================================='
     print "\n"
+    
+    machine=`uname -m`
+    print "Machine type: $machine"
+    if [[ $machine =~ ^x86_64 ]]; then
+        print "Detected Intel Mac"
+        androidstudiourl="https://redirector.gvt1.com/edgedl/android/studio/install/2022.2.1.20/android-studio-2022.2.1.20-mac.dmg"
+    else
+        if [[ $machine =~ ^arm ]]; then
+            print "Detected Apple Silicon Mac"
+            androidstudiourl="https://redirector.gvt1.com/edgedl/android/studio/install/2022.2.1.20/android-studio-2022.2.1.20-mac_arm.dmg"
+        else
+            print "Unsupported machine type $machine"
+            exit 1
+        fi
+    fi
+
+    androidstudiodmg="androidstudio.dmg"
+    download_and_install_app_from_dmg "Android Studio Flamingo" "$androidstudiourl" "$androidstudiodmg"
 }
 
 uninstall_android_dev_tools() {
