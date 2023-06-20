@@ -431,7 +431,7 @@ install_web_dev_tools() {
     # Per Alina:
     # - fork https://github.com/Sage-Bionetworks/mtb
     # - download your fork and set up upstream/origin as you would any other project with origin to your fork and upstream to Sage-Bionetworks
-    fork_mtb
+    fork_from_sage "mtb"
     
     # - download and install VS Code: https://code.visualstudio.com/
     install_vscode
@@ -464,12 +464,14 @@ install_web_dev_tools() {
     
 }
 
-fork_mtb() {
+fork_from_sage() {
+    args=()
+    repo=$1
     # check if the repo already exists; if not, clone and then fork it
-    if [[ ! -e "$REPOHOME/mtb" ]]; then
+    if [[ ! -e "$REPOHOME/$1" ]]; then
         pushd $REPOHOME
-        /opt/local/bin/gh repo clone Sage-Bionetworks/mtb
-        pushd mtb
+        /opt/local/bin/gh repo clone Sage-Bionetworks/"$1"
+        pushd "$1"
         /opt/local/bin/gh repo fork --remote=true
         popd
         popd
