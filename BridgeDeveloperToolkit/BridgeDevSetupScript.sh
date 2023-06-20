@@ -118,6 +118,7 @@ install_bridge_dev_tools() {
         fi
     fi
 
+    fork_from_sage "BridgeServer2"
     install_corretto
     install_intellij
     install_maven
@@ -355,12 +356,6 @@ install_mysql() {
 
 uninstall_mysql() {
     #TODO: emm 2023-05-12
-}
-
-# check for/create fork of BridgeServer2
-
-fork_bridgeserver2() {
-
 }
 
 # do initial setup
