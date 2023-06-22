@@ -80,7 +80,8 @@ install_ios_dev_tools() {
     print '==========================================='
     print "\n"
 
-    #TODO: emm 2023-04-11: fork/clone core repos for developing Sage ios apps
+    fork_from_sage "MobileToolboxApp-iOS"
+    fork_from_sage "mobile-client-json"
 }
 uninstall_ios_dev_tools() {
     #TODO: emm 2023-02-01
@@ -404,6 +405,7 @@ install_android_dev_tools() {
 
     androidstudiodmg="androidstudio.dmg"
     download_and_install_app_from_dmg "Android Studio Flamingo" "$androidstudiourl" "$androidstudiodmg"
+    fork_from_sage "MobileToolboxApp-Android"
 }
 
 uninstall_android_dev_tools() {
