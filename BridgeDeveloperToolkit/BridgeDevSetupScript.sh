@@ -571,9 +571,24 @@ if [[ `whoami` != root ]]; then
     exit 1
 fi
 
+# default location to clone GitHub repos (can override in command line with argument to -r/--repohome option)
+REPOHOME="$HOME"
+
 # parse command line options
-zparseopts -D -E -F -a install_flags - x+ -xcode+ m+ -macports+ g+ -gh+ i+ -iOS+ a+ -android+\
-        b+ -bridge+ w+ -web+ || exit 1
+zparseopts -D -E -F -a install_flags - r:REPOHOME -repohome:REPOHOME x -xcode m -macports g -gh i -iOS a -android\
+        b -bridge w -web || exit 1
+        
+# if REPOHOME is not an absolute path, assume it's relative to $HOME
+if [[ "$REPOHOME" != /* ]]; then
+    REPOHOME="$HOME/$REPOHOME"
+fi
+
+echo "Forked repositories will be cloned to $REPOHOME"
+
+# make sure REPOHOME directory exists
+if [[ ! -e "$REPOHOME" ]]; then
+    mkdir -p $REPOHOME
+fi
 
 # remove first -- or -
 end_opts=$@[(i)(--|-)]
@@ -582,10 +597,6 @@ set -- "${@[0,end_opts-1]}" "${@[end_opts+1,-1]}"
 # set up path to prioritize MacPorts binaries for the duration of the script
 macPortsBin=/opt/local/bin
 PATH="${macPortsBin}:${PATH}"
-
-# set up where to clone GitHub repos
-#TODO: Figure out where to default this to
-REPOHOME="/Volumes/Tereshkova/Development/Sage"
 
 # Install Xcode
 if install_all || has_install_flag '-x' || has_install_flag '--xcode'; then
