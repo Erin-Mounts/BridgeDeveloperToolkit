@@ -80,7 +80,7 @@ install_ios_dev_tools() {
     print '==========================================='
     print "\n"
 
-    fork_from_sage "MobileToolboxApp-iOS"
+    fork_from_sage "OpenBridgeApp-iOS"
     fork_from_sage "mobile-client-json"
 }
 uninstall_ios_dev_tools() {
@@ -150,8 +150,9 @@ download_and_install_app_from_pkg() {
         pushd ~/Downloads
     
         print "\n"
-        print "Downloading $appname installer .pkg `pwd`..."
+        print "Downloading $appname installer .pkg to `pwd`..."
         curl -L $curl_progress "$downloadurl" -o "$pkgname"
+        
         open "$pkgname"
         print "\n"
         read -q "anyKey?When the installer package finishes installing $appname, hit any key to continue: "
@@ -166,18 +167,21 @@ download_and_install_app_from_pkg() {
 # install/update Corretto 8
 install_corretto() {
     corretto8pkg="corretto.pkg"
-    download_and_install_app_from_pkg "Corretto 8" "$corretto8url" "$corretto8pkg"
+    sudo download_and_install_app_from_pkg "Corretto 8" "$corretto8url" "$corretto8pkg"
     
     # Set $JAVA_HOME and $JAVA_VERSION to corretto in ~/.zshenv
     jhomercfile=~/.zshenv
     print "Setting JAVA_HOME and JAVA_VERSION in \"$jhomercfile\"..."
-    corretto_home=`/usr/libexec/java_home -V 2>/dev/null | egrep -o '/.*corretto.*$'`
-    java_version=`/usr/libexec/java_home -V 2>&1 1>/dev/null | sed -En 's/^[[:space:]]+([^[:space:]]*).*$/\1/p'`
+    corretto_home=`sudo /usr/libexec/java_home -V 2>/dev/null | egrep -o '/.*corretto.*$'`
+    java_version=`sudo /usr/libexec/java_home -V 2>&1 1>/dev/null | sed -En 's/^[[:space:]]+([^[:space:]]*).*$/\1/p'`
     timestamp=$(date -j -f "%a %b %d %T %Z %Y" "`date`" "+%s")
     if [[ -e "$jhomercfile" ]]; then
         # make a backup copy of the rc file appending a timestamp extension
         cp "$jhomercfile" "$jhomercfile.$timestamp"
     fi
+    print "Coretto home: $corretto_home"
+    print "Java version: $java_version"
+    print "RC file to be created/updated: $jhomercfile"
     export_var_as_value_from_config_file "JAVA_HOME" "$corretto_home" "$jhomercfile"
     export_var_as_value_from_config_file "JAVA_VERSION" "$java_version" "$jhomercfile"
     
@@ -240,9 +244,16 @@ uninstall_intellij() {
 # install/update MacPorts
 
 install_macports() {
-    macportspkgurl="https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-13-Ventura.pkg"
-    macportspkg="MacPorts.pkg"
-    download_and_install_app_from_pkg "MacPorts" "$macportspkgurl" "$macportspkg"
+    port version; error=$?
+    if [[ ${error} == 0 ]]; then
+        # Already installed, so just update MacPorts and any outdated ports
+        port selfupdate
+        port upgrade outdated
+    else
+        macportspkgurl="https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-13-Ventura.pkg"
+        macportspkg="MacPorts.pkg"
+        download_and_install_app_from_pkg "MacPorts" "$macportspkgurl" "$macportspkg"
+    fi
 }
 
 uninstall_macports() {
@@ -253,6 +264,7 @@ uninstall_macports() {
 port_install() {
     args=()
     while (( $# )); do
+        print "Installing $1 via MacPorts (password may be required)..."
         sudo port install $1
         shift
     done
@@ -307,15 +319,17 @@ download_and_install_app_from_pkg_on_dmg() {
         downloadurl=$2
         dmgname=$3
         
+        pushd ~/Downloads
+    
         print "\n"
         print "Downloading $appname .dmg to `pwd`..."
         curl -L $curl_progress "$downloadurl" -o "$dmgname"
 
         # based loosely on https://stackoverflow.com/a/55869632
         print "Mounting .dmg..."
-        volume=$(hdiutil attach -nobrowse "$dmgname" | tail -n1 | cut -f3-; exit ${PIPESTATUS[0]})
+        volume=$(hdiutil attach -nobrowse "$dmgname" | tail -n1 | cut -f3-)
         print "Opening installer .pkg..."
-        open "$volume/*.pkg"
+        open "$volume"/*.pkg
         print "\n"
         read -q "anyKey?When the installer package finishes installing $appname, hit any key to continue: "
 
@@ -329,6 +343,8 @@ download_and_install_app_from_pkg_on_dmg() {
         fi
         print "Deleting .dmg..."
         rm -f "$dmgname"
+        
+        popd
     fi
 }
 
@@ -341,7 +357,7 @@ install_mysql() {
     pushd ~
     
     configfile=".my.cnf"
-    if [[ !e "${configfile}" ]]; then
+    if [[ ! -e "${configfile}" ]]; then
         # create the config file and populate it
         echo "# $configfile file created by script $SCRIPT_NAME" > "$configfile"
         echo "[mysqld]" >> "$configfile"
@@ -462,6 +478,10 @@ install_web_dev_tools() {
 }
 
 fork_from_sage() {
+    # short circuit if CLONEREPOS flag is "no"
+    if [[ $CLONEREPOS == "no" ]]; then
+        return
+    fi
     args=()
     repo=$1
     # check if the repo already exists; if not, clone and then fork it
@@ -547,6 +567,7 @@ export_var_as_value_from_config_file() {
     # Get the path to the config file
     CONFIG_FILE=$1
 
+    print "Setting $VAR_NAME to \"$VAR_VALUE\" in $CONFIG_FILE"
     # Check if the config file exists
     if [ ! -f "$CONFIG_FILE" ]; then
         # If it doesn't exist, create it and add a line to export the variable
@@ -556,7 +577,15 @@ export_var_as_value_from_config_file() {
         # If it exists, check if the variable is already exported
         if grep -q "export $VAR_NAME=" "$CONFIG_FILE"; then
             # If it is, replace the existing value with the new value
-            sed -i "s/export $VAR_NAME=.*/export $VAR_NAME=\"$VAR_VALUE\"/" "$CONFIG_FILE"
+            pattern="export $VAR_NAME=.*"
+            # First we need to escape the delimiter character in the replacement string:
+            replacement="export $VAR_NAME=\\\"$VAR_VALUE\\\""
+            escaped_replacement=$(printf '%s\n' "$replacement" | sed -e 's/[\/&]/\\&/g')
+            printf "escaped_replacement: >>%s<<" $escaped_replacement
+            sed_command="sed -i '' \"s/$pattern/$escaped_replacement/\" \"$CONFIG_FILE\""
+            print "calling this sed command:"
+            printf '%s\n' $sed_command
+            eval ${sed_command}
         else
             # If it isn't, add a new line to export the variable with the desired value
             echo "export $VAR_NAME=\"$VAR_VALUE\"" >> "$CONFIG_FILE"
@@ -574,20 +603,39 @@ fi
 # default location to clone GitHub repos (can override in command line with argument to -r/--repohome option)
 REPOHOME="$HOME"
 
+# default to cloning repos
+CLONEREPOS="yes"
+
 # parse command line options
-zparseopts -D -E -F -a install_flags - r:REPOHOME -repohome:REPOHOME x -xcode m -macports g -gh i -iOS a -android\
+zparseopts -D -E -F -a install_flags - r:=repohome -repohome:=repohome n -noclonerepos x -xcode m -macports g -gh i -iOS a -android\
         b -bridge w -web || exit 1
         
-# if REPOHOME is not an absolute path, assume it's relative to $HOME
-if [[ "$REPOHOME" != /* ]]; then
-    REPOHOME="$HOME/$REPOHOME"
+# If -r or --repohome was given, figure out where that is (or should be)
+if [[ ${#repohome[@]} == 2 ]]; then
+    expanded_home=$(realpath "$repohome[2]" 2>/dev/null); exists=$? # thanks, ChatGPT
+    if [[ ${exists} != 0 ]]; then # nonzero result code in zsh means the function returned with an error
+        # Could not get the realpath, presumably because the full path doesn't exist yet. Let's assume (for now) that
+        # the specified path was a well-formed absolute or relative path, though, without any ~, ., or .. elements.
+        expanded_home="$repohome[2]"
+    fi
+    if [[ ${expanded_home} == /* ]]; then
+        # it's an absolute path
+        REPOHOME="${expanded_home}"
+    else
+        # it's a relative path--assume it's meant to be relative to `pwd`, the directory the script was called from.
+        REPOHOME="`pwd`/${expanded_home}"
+    fi
 fi
 
 echo "Forked repositories will be cloned to $REPOHOME"
 
 # make sure REPOHOME directory exists
 if [[ ! -e "$REPOHOME" ]]; then
-    mkdir -p $REPOHOME
+    mkdir -p $REPOHOME; exists=$?
+    if [[ ${exists} != 0 ]]; then # nonzero result code in zsh means the function returned with an error
+        print "Failed to create directory \"$REPOHOME\"--unable to proceed"
+        exit 1
+    fi
 fi
 
 # remove first -- or -
@@ -597,6 +645,11 @@ set -- "${@[0,end_opts-1]}" "${@[end_opts+1,-1]}"
 # set up path to prioritize MacPorts binaries for the duration of the script
 macPortsBin=/opt/local/bin
 PATH="${macPortsBin}:${PATH}"
+
+# Should repos not be cloned?
+if has_install_flag '-n' || has_install_flag '--noclonerepos'; then
+    CLONEREPOS="no"
+fi
 
 # Install Xcode
 if install_all || has_install_flag '-x' || has_install_flag '--xcode'; then
