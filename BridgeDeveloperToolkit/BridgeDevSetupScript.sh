@@ -593,12 +593,12 @@ export_var_as_value_from_config_file() {
     fi
 }
 
-if [[ `whoami` != root ]]; then
-    print "Please run this script as root or with sudo (e.g. by copying the following\n"
-    print "line, pasting it into a Terminal window, and hitting return or enter):\n"
-    print "cd `pwd`; sudo zsh $SCRIPT_NAME $@"
-    exit 1
-fi
+#if [[ `whoami` != root ]]; then
+#    print "Please run this script as root or with sudo (e.g. by copying the following\n"
+#    print "line, pasting it into a Terminal window, and hitting return or enter):\n"
+#    print "cd `pwd`; sudo zsh $SCRIPT_NAME $@"
+#    exit 1
+#fi
 
 # default location to clone GitHub repos (can override in command line with argument to -r/--repohome option)
 REPOHOME="$HOME"
